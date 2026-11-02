@@ -1,0 +1,271 @@
+/* =============================================================
+   style.css  —  AI-Powered Task Management Assistant
+   Supplements Tailwind. Contains:
+   - Custom checkbox, task item animation
+   - AI chat bubbles (user & assistant)
+   - Typing indicator animation
+   - Filter active state, modal backdrop
+   ============================================================= */
+
+/* ─── Reset box-sizing ─────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+/* ═══════════════════════════════════════════════════════════
+   TASK LIST STYLES (unchanged)
+   ═══════════════════════════════════════════════════════════ */
+
+/* ─── Task item slide-in animation ────────────────────────── */
+@keyframes slideIn {
+  from { opacity: 0; transform: translateY(-8px); }
+  to   { opacity: 1; transform: translateY(0);    }
+}
+
+.task-item {
+  animation: slideIn 0.18s ease-out both;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  transition: background-color 0.15s;
+}
+
+.task-item:hover {
+  background-color: #eff6ff; /* brand-50 */
+}
+
+/* ─── Custom circular checkbox ─────────────────────────────── */
+.task-checkbox {
+  appearance: none;
+  -webkit-appearance: none;
+  flex-shrink: 0;
+  width: 1.2rem;
+  height: 1.2rem;
+  border: 2px solid #bfdbfe; /* blue-200 */
+  border-radius: 50%;
+  cursor: pointer;
+  position: relative;
+  transition: background-color 0.15s, border-color 0.15s;
+}
+
+.task-checkbox:hover {
+  border-color: #3b82f6; /* brand-500 */
+}
+
+.task-checkbox:checked {
+  background-color: #2563eb;
+  border-color:     #2563eb;
+}
+
+.task-checkbox:checked::after {
+  content: "";
+  position: absolute;
+  left: 3px;
+  top: 0px;
+  width: 6px;
+  height: 10px;
+  border: 2px solid #ffffff;
+  border-top:  none;
+  border-left: none;
+  transform: rotate(45deg);
+}
+
+/* ─── Task label ───────────────────────────────────────────── */
+.task-label {
+  flex: 1;
+  font-size: 0.875rem;
+  color: #1e293b;
+  word-break: break-word;
+  transition: color 0.15s, text-decoration-color 0.15s;
+}
+
+.task-label.is-completed {
+  text-decoration: line-through;
+  text-decoration-color: #94a3b8;
+  color: #94a3b8;
+}
+
+/* ─── Task action buttons ───────────────────────────────────── */
+.task-actions {
+  display: flex;
+  gap: 0.25rem;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+
+.task-item:hover .task-actions,
+.task-item:focus-within .task-actions {
+  opacity: 1;
+}
+
+.btn-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: none;
+  border-radius: 0.5rem;
+  background: transparent;
+  cursor: pointer;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.btn-edit  { color: #2563eb; }
+.btn-edit:hover  { background-color: #dbeafe; }
+
+.btn-delete { color: #ef4444; }
+.btn-delete:hover { background-color: #fef2f2; }
+
+/* ─── Filter nav buttons ────────────────────────────────────── */
+.filter-btn {
+  padding: 0.2rem 0.65rem;
+  font-size: 0.75rem;
+  color: #64748b;
+  background: transparent;
+  border: 1px solid transparent;
+  border-radius: 0.5rem;
+  cursor: pointer;
+  transition: color 0.15s, background-color 0.15s, border-color 0.15s;
+}
+
+.filter-btn:hover { color: #2563eb; }
+
+.filter-btn.is-active-filter {
+  color: #f97316;
+  border-color: #fed7aa;
+  background-color: #fff7ed;
+  font-weight: 600;
+}
+
+/* ─── Modal backdrop ────────────────────────────────────────── */
+.modal-overlay {
+  background-color: rgba(15, 23, 42, 0.45);
+  backdrop-filter: blur(3px);
+}
+
+.modal-overlay.hidden { display: none; }
+
+/* ─── Empty state ───────────────────────────────────────────── */
+#empty-state:not(.hidden) { display: flex; }
+
+
+/* ═══════════════════════════════════════════════════════════
+   AI CHAT STYLES
+   ═══════════════════════════════════════════════════════════ */
+
+/* ─── Chat bubble fade-in ───────────────────────────────────── */
+@keyframes bubbleIn {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0);   }
+}
+
+.chat-bubble {
+  animation: bubbleIn 0.2s ease-out both;
+  max-width: 85%;
+  word-break: break-word;
+}
+
+/* User bubble — right-aligned, orange accent */
+.chat-bubble-user {
+  align-self: flex-end;
+  background-color: #f97316; /* accent-500 */
+  color: #ffffff;
+  border-radius: 1rem 1rem 0.25rem 1rem;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+/* AI bubble — left-aligned, light blue */
+.chat-bubble-ai {
+  align-self: flex-start;
+  background-color: #eff6ff; /* brand-50 */
+  color: #1e293b;
+  border: 1px solid #bfdbfe;
+  border-radius: 1rem 1rem 1rem 0.25rem;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+
+/* Bold text inside AI responses */
+.chat-bubble-ai strong {
+  color: #1d4ed8; /* brand-700 */
+}
+
+/* Error bubble */
+.chat-bubble-error {
+  align-self: flex-start;
+  background-color: #fef2f2;
+  color: #b91c1c;
+  border: 1px solid #fecaca;
+  border-radius: 1rem 1rem 1rem 0.25rem;
+  padding: 0.6rem 0.9rem;
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+
+/* Row wrapper for AI messages (avatar + bubble) */
+.chat-row-ai {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+}
+
+/* Small AI avatar circle */
+.chat-avatar {
+  flex-shrink: 0;
+  width: 1.75rem;
+  height: 1.75rem;
+  border-radius: 50%;
+  background-color: #2563eb;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ─── Typing indicator (three bouncing dots) ────────────────── */
+@keyframes dotBounce {
+  0%, 80%, 100% { transform: translateY(0);    opacity: 0.4; }
+  40%           { transform: translateY(-5px); opacity: 1;   }
+}
+
+.typing-indicator {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 0.6rem 0.9rem;
+  background-color: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 1rem 1rem 1rem 0.25rem;
+}
+
+.typing-indicator span {
+  display: block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background-color: #3b82f6;
+  animation: dotBounce 1.2s infinite ease-in-out;
+}
+
+.typing-indicator span:nth-child(1) { animation-delay: 0s;    }
+.typing-indicator span:nth-child(2) { animation-delay: 0.2s;  }
+.typing-indicator span:nth-child(3) { animation-delay: 0.4s;  }
+
+/* ─── Send button disabled state ───────────────────────────── */
+#chat-send-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* ─── API key status — active indicator ─────────────────────── */
+.api-key-active {
+  color: #16a34a !important; /* green-600 */
+  border-color: #bbf7d0 !important; /* green-200 */
+}
